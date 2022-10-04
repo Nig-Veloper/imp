@@ -1,0 +1,959 @@
+Practical 1
+Temperature Converter 
+
+Steps :
+1) Create a WebService 
+" Write Code "
+
+ @WebMethod(operationName = "fToC")
+    public float fToC(@WebParam(name = "a") float a) {
+        return ((a - 32) * 5/9);
+    }
+    
+    
+    @WebMethod(operationName= "cToF")
+    public float cToF(@WebParam(name = "b") float b){
+        return((b * 9/5) + 32);
+    }
+2) Deploy the project 
+3) Test the WebService
+4) Create a WebService client 
+" create a new package for the client "
+5) Create a index.html and newjsp.jsp files for creating frontend 
+index.html 
+        <form action="newjsp.jsp" method="POST">
+            Enter Temperature
+            <br>
+            <input type="text" name="txt" value="">
+            <br>
+            <input type="submit" value="Convert" name="convert">    
+        </form>
+
+newjsp.jsp 
+        <%
+            // Webservice obj
+            tycsclient.NewWebService_Service obj = new tycsclient.NewWebService_Service();
+            // Creating a port to the service
+            tycsclient.NewWebService port = obj.getNewWebServicePort();
+           
+            
+            String val = request.getParameter("txt");
+            float temp = Float.parseFloat(val);
+            float result1 = port.cToF(temp);
+            float result2 = port.fToC(temp);
+            out.println("Celcius to Farhanite :"+ result1);
+        %>
+        <br>
+        <%
+            out.println("Farhan to Celcius :"+ result2);
+        %>
+6) Run and Done ;)
+
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+Practical 2
+Aritmetic Operation 
+
+1) Create a Web Application:
+File > New Project > Java Web > Web Application > Name: p2 >
+Add GlassFish Server 4.1 > Finish > (you’ll get index.html, delete this file)
+2) Create a Web Service in that project:
+Right Click on Project Name > New > Web Service... >
+Name:calc and Package Name:ty > OK > (you’ll get calc.java file)
+3) As we have created our WEB SERVICE(i.e. calc), WE’LL NOW ADD SOME FUNCTIONALITIES
+(i.e. addition, subtraction, multiplication, division).
+So, in the class calc, add 4 methods by doing:
+a) Right Click > Insert Code > Add Web Service Operation... >
+Name: addition >
+Return Type: float >
+Add a Parameter ‘a’ with Type: float >
+Add a Parameter ‘b’ with Type: float > OK >
+Now add formula in return statement (a+b) .
+b) Right Click > Insert Code > Add Web Service Operation... >
+Name: subtraction >
+Return Type: float >
+Add a Parameter ‘b’ with Type: float >
+Add a Parameter ‘b’ with Type: float > OK >
+Now add formula in return statement (a-b) .
+c) Right Click > Insert Code > Add Web Service Operation... >
+Name: multiplication >
+Return Type: float >
+Add a Parameter ‘b’ with Type: float >
+Add a Parameter ‘b’ with Type: float > OK >
+Now add formula in return statement (a*b) .
+d) Right Click > Insert Code > Add Web Service Operation... >
+Name: division >
+Return Type: float >
+Add a Parameter ‘b’ with Type: float >
+Add a Parameter ‘b’ with Type: float > OK >
+Now add formula in return statement (a/b) .
+CODE(calc.java):
+
+package ty;
+import javax.jws.WebService;
+import javax.jws.WebMethod;
+import javax.jws.WebParam;
+@WebService(serviceName = "calc")
+
+public class calc {
+@WebMethod(operationName = "addition")
+public float addition(@WebParam(name = "a") float a, @WebParam(name = "b") float b) {
+return (a+b);
+}
+@WebMethod(operationName = "subtraction")
+public float subtraction(@WebParam(name = "a") float a, @WebParam(name = "b") float b) {
+return (a-b);
+}
+@WebMethod(operationName = "multiplication")
+public float multiplication(@WebParam(name = "a") float a, @WebParam(name = "b") float b) {
+return (a*b);
+}
+@WebMethod(operationName = "division")
+public float division(@WebParam(name = "a") float a, @WebParam(name = "b") float b) {
+return (a/b);
+}
+}
+4) Compile(F9) and Deploy(right click on Project Name > Deploy).
+5) Now we’ll test our web service. So navigate to:
+Projects > Project Name > Web Services > right click on calc >
+click Test Web Service > (the browser will open). (calc here is a WSDL file)
+6) Perform conversions.
+7) Now we’ll be using the created Web Service(i.e. calc) by creating our WEB SERVICE CLIENT.
+So, Right Click on Project Name > New > Other > Web Services > Web Service Client... >
+Browse your Project Name and select WSDL file > Add Package Name: tycs > Finish.
+(NOTE THAT : the package we first created in WEB SERVICE(i.e. ty) will now be linked to our
+created package in CLIENT(i.e. tycs). We can also see the Generated Sources in the Solution
+Explorer. We will further use this new package name for the rest.)
+8) Now to make front page, we need to create a JSP file.
+So, Right Click on Project Name > New > JSP > File Name: index > Finish.
+• Now from the palette, add HTML Form(Action:indexaction.jsp, Type:text,
+Method:Post)
+• Inside Form tag, add 2 Text Input: with Name(txt1,txt2) resp.
+• Inside Form tag, add 4 Button: with Type(submit) & Name(add,sub,mul,div) resp. &
+Value(Addition,Subtraction,Multiplication,Division) resp.
+
+CODE(index.jsp):
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>JSP Page</title>
+</head>
+<body>
+<h1>Calculator</h1>
+<form action="indexaction.jsp" method="POST">
+Enter Number1:
+<input type="text" name="txt1" value="" />
+Enter Number2:
+<input type="text" name="txt2" value="" />
+<input type="submit" value="Addition" name="add" />
+<input type="submit" value="Subtraction" name="sub" />
+<input type="submit" value="Multiplication" name="mul" />
+<input type="submit" value="Division" name="div" />
+</form>
+</body>
+</html>
+
+9) Now to create the action behind that, we’ll create another JSP file, with a name that is
+declared in the previous JSP file.
+So, Right Click on Project Name > New > JSP > File Name: indexaction > Finish.
+Then add some <%JSP code%> under body tag.
+CODE(indexaction.jsp):
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>JSP Page</title>
+</head>
+<body>
+<%
+tycs.Calc_Service obj=new tycs.Calc_Service(); //obj of service
+tycs.Calc port=obj.getCalcPort(); //port for service
+String num1=request.getParameter("txt1"); //took input1
+String num2=request.getParameter("txt2"); //took input2
+float val1=Float.parseFloat(num1); //parsing input variable1 to float
+float val2=Float.parseFloat(num2); //parsing input variable2 to float
+String ad=request.getParameter("add"); //took response from button1
+String su=request.getParameter("sub"); //took response from button2
+String mu=request.getParameter("mul"); //took response from button3
+String di=request.getParameter("div"); //took response from button4
+//if responses aren’t null, then do
+if(ad!=null)
+{
+float result=port.addition(val1, val2); //calling webservice method1
+out.println("Addition: "+result);
+}
+else if(su!=null)
+{
+float result=port.subtraction(val1, val2); //calling webservice method2
+out.println("Subtraction: "+result);
+}
+else if(mu!=null)
+
+{
+float result=port.multiplication(val1, val2); //calling webservice method3
+out.println("Multiplication: "+result);
+}
+else
+{
+float result=port.division(val1, val2); //calling webservice method4
+out.println("Division: "+result);
+}
+%>
+</body>
+</html>
+10) Now RUN “index.jsp” file.
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+practical 3
+Fetch Weather Report 
+
+package ty;
+
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import javax.jws.WebService;
+import javax.jws.WebMethod;
+import javax.jws.WebParam;
+
+@WebService(serviceName = "fetchreport")
+public class fetchreport {
+
+@WebMethod(operationName = "fetchinfo")
+public String fetchinfo(@WebParam(name = "a") String a) {
+try{
+String info="";
+String sql="select * from wreport where city='"+a+"'";
+Class.forName("com.mysql.jdbc.Driver");
+Connection con=DriverManager.getConnection("jdbc:mysql://localhost:3306/p5","root","root");
+ResultSet rs=con.createStatement().executeQuery(sql);
+
+while(rs.next()){
+info=info+rs.getString(1)+"\t"+rs.getString(2)+"\t"+rs.getString(3); //1,2,3 are columns of the table
+}
+return info;
+}
+catch(Exception e){
+return e.getMessage();
+}
+}
+}
+
+OUTPUTS:
+
+CODE(index.jsp):
+
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>JSP Page</title>
+</head>
+<body>
+<center>
+<h1>---Weather Report---</h1>
+<form action="indexaction.jsp" method="POST">
+Select City:
+<select name="city">
+<option value="Mumbai">Mumbai</option>
+
+<option value="Chennai">Chennai</option>
+</select>
+<br>
+<input type="submit" value="Submit" />
+</form>
+</center>
+</body>
+</html>
+
+CODE(indexaction.jsp):
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>JSP Page</title>
+</head>
+<body>
+<center>
+<%
+tycs.Fetchreport_Service obj=new tycs.Fetchreport_Service(); //obj of service
+tycs.Fetchreport port=obj.getFetchreportPort(); //port for service
+String x=request.getParameter("city"); //took input from DropdownList name(city)
+out.println("Result: "+port.fetchinfo(x)); //calling webservice method(fetchinfo) by passing our selected
+city in a variable(x)
+%>
+</center>
+</body>
+</html>
+
+For Fetch Weather Report 
+
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Practical 2b
+Web Service to insert student record in database (one way operation)
+
+Steps :
+0) Create a database "studentdb" in mysql 
+- code 
+
+create database studentdb;
+use studentdb;
+create table student(sname varchar(20), srollno varchar(20), sclass varchar(20));
+
+1) Create New WebService
+    - name it "insertrecord" package name  "ty"
+2) Add JAR file for mysql-connector to "Libraries" folder
+3) Add Code in "insertrecord.java"
+
+    public String StudentRecord(@WebParam(name = "sname") String sname, @WebParam(name = "srollno") String srollno, @WebParam(name = "sclass") String sclass) {
+        //TODO write your implementation code here:
+        try{
+            Class.forName("com.mysql.cj.jdbc");
+            Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/studentdb", "root", "mysql");
+            PreparedStatement stmt = conn.prepareStatement("insert into student values(?,?,?)");
+            stmt.setString(1,sname);
+            stmt.setString(2,srollno);
+            stmt.setString(3, sclass);
+            int i = stmt.executeUpdate();
+            conn.close();
+            return i + "Record Inserted!";
+                 
+        }catch(Exception e){
+            System.out.println(e);
+            return e.toString() + "Error";
+        }
+    }
+
+4) Compile and Deploy the project 
+5) Create 2 files "index.jsp" and "indexaction.jsp"
+
+index.jsp
+
+    <center>
+        <h1>Student's Record</h1>
+            <form action="indexaction.jsp" method="POST">
+                Enter Name: <input type="text" name="sname" value="" /><br>
+                Enter RollNo.: <input type="text" name="sroll" value="" /><br>
+                Enter Class: <input type="text" name="sclass" value="" /><br>
+                <input type="submit" value="Submit" />
+            </form>
+    </center>
+
+indexaction.jsp
+
+    <%
+        tycs.Insertrecord_Service obj=new tycs.Insertrecord_Service(); // obj of service
+        tycs.Insertrecord port=obj.getInsertrecordPort(); // port for service 
+        String sname = request.getParameter("sname"); //took input1
+        String sroll = request.getParameter("sroll"); //took input2
+        String sclass = request.getParameter("sclass"); //took input3
+        String res = port.StudentRecord(sname, sroll, sclass); //inserting values by insert method
+        out.println("Result: "+res);
+    %>
+
+
+6) Run and Done ;)
+
+
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+Practical 7
+Use WCF to create a basic ASP.NET Asynchronous JavaScript and XML (AJAX) service.
+STEPS:
+1) Create a “WCF Service(Ajax-enabled)” [SERVER]:
+(NOTE THAT: here we are creating the WCFService & we’ll consume it in Default.aspx script)
+• Navigate to File > New > Project > ASP.NET Web Forms Application(C#) > OK.
+
+• Right-click on Project Name(p9) > Add > New Item > WCF Service(Ajax-enabled) >
+OK.
+
+2) Now in the “Service1.svc.cs” file(AKA WCFService file) in your project, code the part where it
+is commented as //OUR CODE
+
+CODE(Service1.svc.cs)
+
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Runtime.Serialization;
+using System.ServiceModel;
+using System.ServiceModel.Activation;
+using System.ServiceModel.Web;
+using System.Text;
+namespace p9
+{
+[ServiceContract(Namespace = "")]
+[AspNetCompatibilityRequirements(RequirementsMode =
+AspNetCompatibilityRequirementsMode.Allowed)]
+public class Service1
+{
+[OperationContract] //OUR CODE
+public double sum(double a, double b) //OUR CODE
+{
+double result = a + b;
+return result;
+}
+}
+}
+//"sum" is WCFService operation/method
+3) Add the “jQuery.js” file in your project through Solution Explorer:
+Right-click on Project > Add > Existing Item > Browse & Add.
+
+4) Now in the “Default.aspx” file(AKA WebForm) in your project, add some code under
+<head></head> & <body></body> [CLIENT]:
+(NOTE THAT: here we are creating the JS script under <head> that’ll consume our created
+WCFService through means of XML instead of WSDL)
+CODE(Default.aspx)
+
+<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="Default.aspx.cs"
+Inherits="p9._Default" %>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head runat="server">
+<script type="text/javascript" src="jQuery.js"></script>
+<script type="text/javascript">
+$(document).ready(function (){ //loads the jQuery
+$("#btn").click(function () {
+var num1 = $("#txt1").val(); //took input1 from textbox1
+var num2 = $("#txt2").val(); //took input2 from textbox2
+$.ajax({
+url: "Service1.svc/sum",
+
+type: "POST",
+contentType: "application/json; charset=utf-8",
+data: JSON.stringify({ a: num1, b: num2 }),
+
+dataType: "json",
+success: function (data) { $("#txt3").val(data.d); }, //"data.d"
+
+is for printing result in txt3(textbox3)
+error: function (err) {
+alert(err);
+}
+});
+});
+});
+</script>
+<title></title>
+</head>
+<body>
+<form id="form1" runat="server">
+<div>
+Enter First Number: <input id="txt1" type="text" /><br />
+Enter Second Number: <input id="txt2" type="text" /><br />
+<input id="btn" type="button" value="Add Numbers" /><br />
+<input id="txt3" type="text" />
+</div>
+</form>
+</body>
+</html>
+5) Run the “Default.aspx” file: OUTPUT:
+
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+practical 2a
+Write a program to implement the operation can receive request and will return a response in two ways. b) Request –Response
+
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+practical 4
+
+Define a RESTful WebService that accepts the details to be stored in a “student”
+table(id, sname, sclass) and perform CRUD(CREATE, READ, UPDATE AND DELETE)
+
+operations.
+
+STEPS(MYSQL Command Line Client):
+1) Create a database and use it:
+• >create database p6;
+• >use p6;
+STEPS(NetBeans IDE):
+1) Create a Web Application:
+File > New Project > Java Web > Web Application > Name: (p6) >
+Add GlassFish Server > Finish > (you’ll get index.jsp, delete this file)
+2) Create a database connection:
+(NOTE THAT: here we are connecting our created database with NetBeans IDE, so make sure
+you add your database_name and password correctly)
+Navigate to Services tab > Databases > Drivers > right-click over MySQL(Connector/J driver)
+> click Connect Using... > Database: (change “mysql” to “p6”) & Password: (root) & click Test
+Connection > Finish.
+
+Figure1: Connecting with your database will give you this db connection string
+
+3) Create an Entity Class:
+(NOTE THAT: this entity class will create a table with the class name we are providing now.)
+Navigate to Projects tab > right-click over Project Name(p6) > New > Entity Class... >
+Class Name: (student) & Package: (tycs) > Next >
+Data Source: (select New Data Source... from dropdown) >
+JNDI Name: (ANYNAME) &
+Database Connection: (select your db connection string from dropdown) > OK > Finish >
+(you’ll get student.java file).
+4) Adding some code under class student in “student.java”(entity class) file:
+(NOTE THAT: these properties will be created as columns in the student table
+We’ll not create “id” property as it is AUTO-GENERATED)
+• Right-click > Insert Code... > Add Property... > Name: (sname) > OK.
+• Right-click > Insert Code... > Add Property... > Name: (sclass) > OK.
+
+CODE(student.java):
+
+package tycs;
+
+import java.io.Serializable;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+
+@Entity
+public class student implements Serializable {
+private static final long serialVersionUID = 1L;
+@Id
+@GeneratedValue(strategy = GenerationType.AUTO)
+private Long id;
+
+public Long getId() {
+return id;
+}
+
+public void setId(Long id) {
+this.id = id;
+}
+
+//OUR INSERTED CODE for sname
+private String sname;
+
+/**
+* Get the value of sname
+*
+* @return the value of sname
+*/
+public String getSname() {
+return sname;
+}
+
+/**
+* Set the value of sname
+*
+* @param sname new value of sname
+*/
+public void setSname(String sname) {
+this.sname = sname;
+}
+
+//OUR INSERTED CODE for sclass
+private String sclass;
+
+/**
+* Get the value of sclass
+*
+* @return the value of sclass
+*/
+public String getSclass() {
+return sclass;
+}
+
+/**
+* Set the value of sclass
+*
+* @param sclass new value of sclass
+*/
+public void setSclass(String sclass) {
+this.sclass = sclass;
+}
+
+@Override
+public int hashCode() {
+int hash = 0;
+hash += (id != null ? id.hashCode() : 0);
+return hash;
+}
+
+@Override
+public boolean equals(Object object) {
+// TODO: Warning - this method won't work in the case the id fields are not set
+if (!(object instanceof student)) {
+return false;
+}
+student other = (student) object;
+if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
+return false;
+}
+return true;
+}
+
+@Override
+public String toString() {
+return "tycs.student[ id=" + id + " ]";
+}
+}
+
+5) Create a RESTful Web Services from Entity Classes:
+Right-click over Project Name > New > RESTful Web Services from Entity Classes... >
+Add your entity class(tycs.student) from Available to Selected
+
+> Next > Resource Package: (select tycs from dropdown) > Finish > OK.
+
+6) Create a JSF Pages from Entity Classes:
+Right-click over Project Name > New > JSF Pages from Entity Classes... >
+Add your entity class(tycs.student) from Available to Selected > Next > Next > Finish.
+
+7) Perform CRUD(CREATE, READ, UPDATE, DELETE) operations.
+
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+practical 6
+
+Develop client which consumes web services developed in different platform.
+STEPS(Visual Studio IDE):
+1) Create a “Web Service” [SERVER]:
+(NOTE THAT: here we are creating the WebService & we’ll consume it in NetBeans)
+• Navigate to File > New > Project > ASP.NET Web Forms Application(C#) > OK.
+
+• Right-click over Project Name(p7) > Add > Web Service(ASMX) >
+Name: (Calculation) > OK.
+
+2) Now in the “Calculation.asmx.cs” file(AKA WebService file) in your project, code the part
+where it is commented as //OUR CODE
+
+CODE(Calculation.asmx.cs)
+
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web;
+using System.Web.Services;
+namespace p7
+{
+/// <summary>
+/// Summary description for Calculation
+/// </summary>
+[WebService(Namespace = "http://tempuri.org/")]
+[WebServiceBinding(ConformsTo = WsiProfiles.BasicProfile1_1)]
+[System.ComponentModel.ToolboxItem(false)]
+// To allow this Web Service to be called from script, using ASP.NET AJAX,
+uncomment the following line.
+// [System.Web.Script.Services.ScriptService]
+public class Calculation : System.Web.Services.WebService
+{
+[WebMethod] //OUR CODE
+public double addition(double a, double b) //OUR CODE
+{
+double sum = a + b;
+return sum;
+}
+[WebMethod] //OUR CODE
+public double multiplication(double a, double b) //OUR CODE
+{
+double mul = a * b;
+return mul;
+}
+}
+}
+//"addition" & "multiplication" are WS operations/methods
+3) Now Run the file > click-over “Service Description” & copy path of WSDL file:
+(NOTE THAT: here we are copying the WSDL file path. This file path will be added in the
+client so that this WebService is consumed by that client.
+In simple words, THIS IS THE SERVER that we have created.
+“Consume” means that the Web service successfully fulfills the web client’s request.)
+• OUTPUTS:
+
+4) KEEP THIS WEBPAGE OPENED & DO NOT CLOSE Visual Studio IDE or else server will stop.
+
+STEPS(NetBeans IDE):
+1) Create a “Web Application” [CLIENT]:
+(NOTE THAT: here we are creating WebApplication that’ll consume our created WebService)
+• Navigate to File > New Project > Java Web > Web Application > Name: (p7) > Finish.
+(you’ll get “index.jsp” file)
+• Right-click over Project Name(p7) > New > Web Service Client... >
+Select “WSDL URL” and paste the copied path from the browser >
+Package: (tycs) > Finish.
+
+2) Create an HTML page and add some code:
+Right-click over Project Name(p7) > New > HTML... > Finish.
+• Now from the palette, add HTML Form(Action:index.jsp, Type:text, Method:Post)
+• Inside Form tag, add 2 Text Input(Name:txt1 & txt2)
+• Inside Form tag, add Button(Label:Submit, Type:submit)
+CODE(newhtml.html)
+
+<!DOCTYPE html>
+<html>
+<head>
+<title>---Calculation---</title>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+</head>
+<body>
+<form action="index.jsp" method="POST">
+Enter Number1: <input type="text" name="txt1" value="" /><br>
+Enter Number2: <input type="text" name="txt2" value="" /><br>
+<input type="submit" value="Submit" />
+</form>
+</body>
+</html>
+3) Now add some JSP code in “index.jsp” file under <body> tag:
+
+CODE(index.jsp)
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>JSP Page</title>
+</head>
+<body>
+<%
+tycs.Calculation obj=new tycs.Calculation(); //obj of VS WebService(i.e.Calculation)
+tycs.CalculationSoap port=obj.getCalculationSoap(); //port for VS WS
+
+double num1 = Double.parseDouble(request.getParameter("txt1")); //took input1
+double num2 = Double.parseDouble(request.getParameter("txt2")); //took input2
+
+double a = num1; //initialize VS WS argument "a"
+double b = num2; //initialize VS WS argument "b"
+
+double result1 = port.addition(a, b); //calling VS WS method1
+double result2 = port.multiplication(a, b); //calling VS WS method2
+
+out.println("Addition: "+result1); //print result1
+out.println("<br><br>");
+out.println("Multiplication: "+result2); //print result2
+%>
+</body>
+</html>
+4) Run the “newhtml.html” file:
+• OUTPUTS:
+
+5) Finish.
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+practical 5
+
+Step By Step Procedure
+1>    Creating WCF Service
+2>    Consuming WCF Service in Web Application using VS 2008.
+3>    Creating WCF Client.
+Creating WCF Service.
+Steps:
+1>    Open  VS 2008 > Projects > Select C#  >  WCF  > WCF Service Library.
+2>    Type name of  the service file as u need. In this ex.MyWCFSolution. then click OK.
+3>    New Window will open with one Class.cs and Interface .cs File which can be seen in Solution Explore.
+4>    Add the Namespace System.ServiceModel and  also add  Reference in Solution Explore.
+5>    Type the Code in Interface file and class file as shown below.
+Code in Interface(EX: IService1.cs)
+[ServiceContract]
+    public interface IService1
+    {
+        [OperationContract]
+       int add(int a,int b);
+ 
+        [OperationContract]
+       int Sub(int a, int b);
+ 
+        [OperationContract]
+        int Mul(int a, int b);
+ 
+        [OperationContract]
+        int Div(int a, int b);
+ 
+        // TODO: Add your service operations here
+    }
+ 
+Code in Class file(EX: Service1.cs)
+public class Service1 : IService1
+    {
+       
+        int IService1.add(int a, int b)
+        {
+            return (a + b);
+        }
+ 
+        int IService1.Sub(int a, int b)
+        {
+            if (a >= b)
+            {
+                return (a - b);
+            }
+            else
+            {
+                return (b - a);
+            }
+        }
+       
+       
+        public int Mul(int a, int b)
+        {
+            return (a * b);
+        }
+ 
+        public int Div(int a, int b)
+        {
+            if(a>=b)
+                try { return (a / b); }
+                catch
+                { return 0; }
+            else
+                return (b / a);
+        }
+    }
+Consuming WCF Service in Web Application.
+Steps:
+1>Create web Application as shown in attachment please download the File.
+ 
+2> After Creating Design of the Calculator web application the add reference System.ServiceModel namespace into web application in Solution Explore.
+3>Add the WCF Service in visual studio by right click on Reference and select Add service Reference
+4>Give the Service hosted Address and click on Go button and select the service which u created I mean in Ex service1.
+5>Give the namespace: Name as Myservice and  the click OK .  
+1>    Creating WCF Client.
+In Order to call the Methods (services from WCFService) we need to Create the proxyWCF Client.
+Once service is consumed in Application, WCF Client is Created, So Using the name of the Client Name we can call the methods in out applications
+EX. In  Our WCF Service we have 4 methods (add, sub, mul, div).
+2>      TO get the WCF client name Double click on Service i.e Myservice and take the copy of the Client name.
+The fwindow will open in that u take the copy.
+3>    Paste the Client Name in Default.cs File get the following code then create the instance of the client as show in below code. Using this porxy client u can call the services of the WCF service as shown in below code.
+4>    On paste u get MY.Myservice.Service1Client
+5>  Code to be Right in Default.cs in web application(EX:Calculator)
+namespace Calculator
+{
+    public partial class _Default : System.Web.UI.Page
+    {
+       
+        Calculator.Myservice.Service1Client Client = new Calculator.Myservice.Service1Client();
+//Creating proxy client instance “Client”
+        int a, b;
+        protected void Page_Load(object sender, EventArgs e)
+        {
+           
+            Response.Write("MY Calculator");
+ 
+        }
+ 
+        protected void btnAdd_Click(object sender, EventArgs e)
+        {
+int a = Convert.ToInt32(txt1st.Text);
+            int b = Convert.ToInt32(txt2nd.Text);
+ 
+            int Addition = Client.add(10,20);
+            txtResult.Text = Addition.ToString();
+        }
+ 
+        protected void btnsub_Click(object sender, EventArgs e)
+        {
+            a = Convert.ToInt32(txt1st.Text);
+            b = Convert.ToInt32(txt2nd.Text);
+int Addition = Client.Sub(10, 20);
+            txtResult.Text = Addition.ToString();
+ 
+        }
+ 
+        protected void btnmul_Click(object sender, EventArgs e)
+        {  
+a = Convert.ToInt32(txt1st.Text);
+            b = Convert.ToInt32(txt2nd.Text);
+            int Addition = Client.Mul(10, 20);
+            txtResult.Text = Addition.ToString();
+        }
+ 
+        protected void btndiv_Click(object sender, EventArgs e)
+        {
+            a = Convert.ToInt32(txt1st.Text);
+            b = Convert.ToInt32(txt2nd.Text);
+int Addition = Client.Div(10, 20);
+            txtResult.Text = Addition.ToString();
+ 
+        }
+    }
+}
+Testing the application and using WCF services.
+1>  Run the WCF service First.(Ex:MyWCFsolution)
+2>  Run the web Application(EX: Calculator)(download the attachements)
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+practical 8
+Define a web service method that returns the contents of a database in a JSON string. The contents should be displayed in a tabular format.
+MYSQL STEPS:
+First Open Mysql Create Database prac8(you can give any name)
+Then use created database use prac8;
+Then create table college with id and collegename as two columns
+Syntax :create table college(id int primary key,collegename varchar(20));
+Insert values in college
+insert into college values(09,"royalcollege");
+
+NOTE : KEEP MYSQL WINDOW OPEN DNT CLOSE IT
+IN NETBEANS :
+IN SERVICES TAB -click Database Drivers MYSQL (CONNECTOR/JDRIVER)
+right click choose connect using then change database name ,enter yur mysql prt
+number and enter mysql password then test connection when succeeded click 
+next  finish !
+Create Web application by right click on file  new project  java web  web
+application  name it server  choose server glassfish  finish
+
+Now Right click on project  new  other - in categories (left side) choose
+web services and in file types (right side ) choose Restful web services from
+database  Next  click on data source  select new data source in jndi give
+any name for eg royal  in database connection choose your databse which
+you have create that is our prac8
+After that in available tables our college table will appear click on it  click add
+ click next  give package name  tycs finish
+
+Now in your project go to restful web services  click on the collegefaderest 
+
+code will appear  in line 30,37,50,57,64 remove the xml part
+For eg before it is
+@Consumes({"application/xml", "application/json"})
+Remove xml part only not json , eg given below
+@Consumes({"application/json"})
+
+Now right click on project and deploy
+Now again create one more web application name as client and then in index
+jsp add this code in body . <h1>Hello World!</h1>
+<table id="collegedata">
+<tr>
+
+<td>ID </td>
+<td>College Name
+</td>
+</tr> </table>
+
+Note the table id which we had given collegedata same we will use it in script
+Now add this code after title in head
+<script>
+var request = new XMLHttpRequest();
+
+request.open('GET','http://localhost:8080/server/resources/tyexam.college',true);
+//server is our first web application project name
+//and tyexam.college is the name appearing in our server web application in that
+restful web services file
+
+request.onload=function(){
+var data = JSON.parse(this.response);
+for (var i=0;i<data.length;i++){
+var table = document.getElementById("collegedata");//name given to
+
+tabl e id
+
+var row =table.insertRow();
+var cell1=row.insertCell(0);
+var cell2=row.insertCell(1);
+
+cell1.innerHTML=data[i].id;//name should be same as given to column
+
+in mysql
+
+cell2.innerHTML=data[i].collegename; ;//name should be same as
+
+given to column in mysql
+
+}
+};
+request.send();
+</script>
+
+Now clean and build then run the index .jsp file
+Output:
