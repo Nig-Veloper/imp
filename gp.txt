@@ -1,0 +1,1078 @@
+Practical No. 1:Setup DirectX 11, Window Framework and initialize Direct3D device.
+
+Microsoft.DirectX.Direct3D.Device: Performs primitive-based rendering, creates resources, handles system-level variables, adjusts gamma ramp levels, gets and sets palettes, and creates shaders. 
+Microsoft.DirectX.Direct3D.Device device: Initializes a new instance of the current class 
+InitializeComponent(): a method automatically written for you by the Form Designer when you create/change your forms. It contains the code that creates and initializes the user interface objects dragged on the form surface with the values provided by the programmer using the Property Grid of the Form Designer. 
+PresentParameters: Describes the presentation parameters. Properties are: 
+Windowed: Boolean value that indicates whether an application is running in a windowed mode. 
+SwapEffect: Retrieves or sets the swap effect. 
+
+After completing the steps from the initialization file(“base setup.pdf”), now open “Form1.cs” file in your project, and code the part where it is commented as //OUR CODE
+-----Form1.cs------
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Drawing;
+using System.Linq;
+using System.Text;
+using System.Windows.Forms;
+using Microsoft.DirectX; //OUR CODE
+using Microsoft.DirectX.Direct3D; //OUR CODE
+
+namespace WindowsFormsApp8
+{
+Public partial class Form1 : Form
+    {
+        Microsoft.DirectX.Direct3D.Device device; //OUR CODE
+
+public Form1()
+        {
+InitializeComponent();
+InitDevice();    //OUR CODE
+        }
+
+private void InitDevice()     //OUR CODE
+        {
+PresentParameters pp = new PresentParameters();
+pp.Windowed = true;
+pp.SwapEffect = SwapEffect.Discard;
+            device = new Microsoft.DirectX.Direct3D.Device(0, DeviceType.Hardware, this, CreateFlags.SoftwareVertexProcessing, pp);
+        }
+
+private void Form1_Paint(object sender, PaintEventArgs e)
+        {
+            Render();   //OUR CODE
+        }
+
+private void Render()    //OUR CODE
+        {
+device.Clear(ClearFlags.Target, Color.Cyan, 0, 1);
+device.Present();
+        }
+    }
+}
+Click the Start button to run file> (you’ll see the following OUTPUT of the window with the color you specified).
+
+
+
+
+---------------------------------------------------------------------------------------------------------------------------------------------
+
+Practical No. 2:
+
+Aim:  Draw a triangle using Direct3D 11
+
+
+CustomVertex class: Defines various custom fixed-format vertex types. This class is a container of structures. 
+CustomVertex.TransformedColored: Describes a custom vertex format structure that contains transformed vertices and color information. 
+VertexFormat: Describes values that define a vertex format used to describe the contents of vertices that are stored interleaved in a single data stream. 
+• device.DrawUserPrimitives(PrimitiveType,Int32,Object) method: Renders data specified by a user memory pointer as a sequence of geometric primitives of the specified type. 
+
+After completing the steps from the initialization file(“base setup.pdf”), now open “Form1.cs” file in your project, and code the part where it is commented as //OUR CODE
+-----Form1.cs------
+
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Drawing;
+using System.Linq;
+using System.Text;
+using System.Windows.Forms;
+using Microsoft.DirectX;   //OUR CODE
+using Microsoft.DirectX.Direct3D;   //OUR CODE
+
+
+namespace Pract2
+{
+public partial class Form1 : Form
+{
+Microsoft.DirectX.Direct3D.Device device;  //OUR CODE
+public Form1()
+ {
+InitializeComponent();
+InitDevice();                         //OUR CODE
+ }
+private void InitDevice()       //OUR CODE
+ {
+PresentParameters pp = new PresentParameters();
+pp.Windowed = true;
+pp.SwapEffect = SwapEffect.Discard;
+            device = new Microsoft.DirectX.Direct3D.Device(0, DeviceType.Hardware, this, CreateFlags.SoftwareVertexProcessing, pp);
+        }
+
+private void Render()       //OUR CODE
+        {
+CustomVertex.TransformedColored[] v = new CustomVertex.TransformedColored[3]; //3 here is the number of vectors you've defined
+
+
+//triangle1
+v[0].Position = new Vector4(240, 110, 0, 1);
+v[0].Color = System.Drawing.Color.FromArgb(255, 0, 0).ToArgb();
+
+v[1].Position = new Vector4(380, 420, 0, 1);
+v[1].Color = System.Drawing.Color.FromArgb(0, 255, 0).ToArgb();
+
+v[2].Position = new Vector4(110,420, 0, 1);
+v[2].Color = System.Drawing.Color.FromArgb(0, 0, 255).ToArgb();
+
+device.Clear(ClearFlags.Target, Color.Cyan, 0, 1);
+device.BeginScene();
+device.VertexFormat = CustomVertex.TransformedColored.Format;
+device.DrawUserPrimitives(PrimitiveType.TriangleList, 1, v);  //1 for single triangle & 2 for double triangle
+device.EndScene();
+device.Present();
+        }
+
+
+private void Form1_Paint(object sender, PaintEventArgs e)
+        {
+Render();   //OUR CODE
+        }
+    }
+}
+
+Click the Start button to run file> (you’ll see the following OUTPUT of the window with the color you specified).
+
+
+---------------------------------------------------------------------------------------------------------------------------------------------
+
+Practical No. 3:
+
+Aim:  Draw a rectangle using Direct3D 11
+
+After completing the steps from the initialization file(“base setup.pdf”), now open “Form1.cs” file in your project, and code the part where it is commented as //OUR CODE
+-----Form1.cs------
+
+using System;
+usingSystem.Collections.Generic;
+usingSystem.ComponentModel;
+usingSystem.Data;
+usingSystem.Drawing;
+usingSystem.Linq;
+usingSystem.Text;
+usingSystem.Windows.Forms;
+using Microsoft.DirectX;   //OUR CODE
+using Microsoft.DirectX.Direct3D;   //OUR CODE
+
+
+namespace WindowsFormsApp4
+{
+public partialclassForm1 : Form
+    {
+Microsoft.DirectX.Direct3D.Device device;  //OUR CODE
+publicForm1()
+        {
+InitializeComponent();
+InitDevice();                         //OUR CODE
+        }
+
+private void InitDevice()       //OUR CODE
+        {
+PresentParameters pp = newPresentParameters();
+pp.Windowed = true;
+pp.SwapEffect = SwapEffect.Discard;
+            device = newMicrosoft.DirectX.Direct3D.Device(0, DeviceType.Hardware, this, CreateFlags.SoftwareVertexProcessing, pp);
+        }
+
+private void Render()       //OUR CODE
+        {
+CustomVertex.TransformedColored[] v = new CustomVertex.TransformedColored[6]; //6 here is the number of vectors you've defined
+
+//using two triangles to create a rectangle
+
+//triangle1
+v[0].Position = new Vector4(100, 100, 0, 1);
+v[0].Color = System.Drawing.Color.FromArgb(255, 0, 0).ToArgb();
+
+v[1].Position = new Vector4(400, 100, 0, 1);
+v[1].Color = System.Drawing.Color.FromArgb(0, 255, 1).ToArgb();
+
+v[2].Position = new Vector4(400, 300, 0, 1);
+v[2].Color = System.Drawing.Color.FromArgb(1, 0, 255).ToArgb();
+
+//triangle2
+v[3].Position = new Vector4(400, 300, 0, 1);
+v[3].Color = System.Drawing.Color.FromArgb(255, 0, 0).ToArgb();
+
+v[4].Position = new Vector4(100, 300, 0, 1);
+v[4].Color = System.Drawing.Color.FromArgb(20, 255, 0).ToArgb();
+
+v[5].Position = new Vector4(100, 100, 0, 1);
+v[5].Color = System.Drawing.Color.FromArgb(255, 0, 255).ToArgb();
+
+
+device.Clear(ClearFlags.Target, Color.Cyan, 0, 1);
+device.BeginScene();
+device.VertexFormat = CustomVertex.TransformedColored.Format;
+device.DrawUserPrimitives(PrimitiveType.TriangleList, 2, v);  //1 for single triangle & 2 for double triangle
+device.EndScene();
+device.Present();
+        }
+
+private void Form1_Paint(object sender, PaintEventArgs e)
+        {
+Render();   //OUR CODE
+        }  
+
+private void Form1_Load(object sender, EventArgs e)
+        {
+
+        }
+    }
+}
+
+Click the Start button to run file> (you’ll see the following OUTPUT of the window with the color you specified).
+
+---------------------------------------------------------------------------------------------------------------------------------------------
+
+Practical No. 4:
+        
+Aim: Texture the triangle using Direct3D 11
+
+
+Transforms.Projection property: Retrieves or sets the projection transformation Matrix. 
+Matrix.PerspectiveFovLH method: Builds a left-handed perspective projection matrix based on a field of view. 
+Input arguments to PerspectiveFovLHare as follows. 
+//Values provided below are examples 
+1)Field of view in radians: pi/4. 
+2) Aspect ratio, or view-space height divided by width: 1, for a square window. 
+3)Near clipping plane distance: 1 unit. 
+4) Far clipping plane distance: 100 units. 
+
+SYNTAX EG: 
+
+device.Transform.Projection = Matrix.PerspectiveFovLH((float)Math.PI / 4, 1.0f, 1.0f, 100.0f ); 
+Transforms.View property: Retrieves or sets the view transformation matrix. 
+
+
+After completing the steps from the initialization file(“base setup.pdf”), now open “Form1.cs” file in your project, and code the part where it is commented as //OUR CODE
+-----Form1.cs------
+using System;
+usingSystem.Collections.Generic;
+usingSystem.ComponentModel;
+usingSystem.Data;
+usingSystem.Drawing;
+usingSystem.Linq;
+usingSystem.Text;
+usingSystem.Windows.Forms;
+using Microsoft.DirectX;  //OUR CODE
+using Microsoft.DirectX.Direct3D;  //OUR CODE
+
+namespace prac5
+{
+    publicpartialclassForm1 :Form
+    {
+        Microsoft.DirectX.Direct3D.Device device; //OUR CODE
+        public Form1()
+        {
+            InitializeComponent();
+            InitDevice();  //OUR CODE
+        }
+
+        private void InitDevice()  //OUR CODE
+        { 
+            PresentParameters pp = new PresentParameters();
+            pp.Windowed = true;
+            pp.SwapEffect = SwapEffect.Discard;
+
+            device = new Microsoft.DirectX.Direct3D.Device(0, DeviceType.Hardware, this, CreateFlags.SoftwareVertexProcessing, pp);
+            device.Transform.Projection = Matrix.PerspectiveFovLH(3.14f / 4, device.Viewport.Width / device.Viewport.Height, 1f, 1000f);
+            device.Transform.View = Matrix.LookAtLH(new Vector3(0, 0, 20), new Vector3(), newVector3(0, 1, 0));
+            device.RenderState.Lighting = false;
+        }
+
+        private void Render() //OUR CODE
+        {
+            CustomVertex.PositionTextured[] vertexes = new CustomVertex.PositionTextured[3]; //3 here is the number of vectors you've defined
+
+            //triangle1
+            vertexes[0] = new CustomVertex.PositionTextured(new Vector3(0, 0, 0), 0, 0);
+            vertexes[1] = new CustomVertex.PositionTextured(new Vector3(5, 0, 0), 0, 1);
+            vertexes[2] = new CustomVertex.PositionTextured(new Vector3(0, 5, 0), -1, -1);
+
+            Texture texture = new Texture(device, new Bitmap("E:\\design assignment\\glass.jpg "), 0, Pool.Managed);
+            device.Clear(ClearFlags.Target, Color.Cyan, 1.0f, 0);
+            device.BeginScene();
+            device.SetTexture(0, texture);
+            device.VertexFormat = CustomVertex.PositionTextured.Format;
+            device.DrawUserPrimitives(PrimitiveType.TriangleList, vertexes.Length / 3, vertexes); 
+            //in the above line(vertexes.Length=3, so 3/3=1) hence, 1 for single triangle & 2 for double triangle
+            device.EndScene();
+            device.Present();
+        }
+
+        private void Form1_Paint(object sender, PaintEventArgs e)
+        {
+            Render(); //OUR CODE
+        }
+
+        private void Form1_Load(object sender, EventArgs e)
+        {
+
+        }
+    }
+}
+
+Click the Start button to run file> (you’ll see the following OUTPUT of the window with the color you specified).
+
+
+---------------------------------------------------------------------------------------------------------------------------------------------
+Practical No. 5:
+        
+Aim: Texture the rectangle using Direct3D 11
+ 
+After completing the steps from the initialization file(“base setup.pdf”), now open “Form1.cs” file in your project, and code the part where it is commented as //OUR CODE
+-----Form1.cs------
+using System;
+using  System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Drawing;
+using System.Linq;
+using System.Text;
+using System.Windows.Forms;
+using Microsoft.DirectX;  //OUR CODE
+using Microsoft.DirectX.Direct3D;  //OUR CODE
+
+namespace p6
+{
+    publicpartialclassForm1 :Form
+    {
+        Microsoft.DirectX.Direct3D.Device device; //OUR CODE
+        public Form1()
+        {
+            InitializeComponent();
+            InitDevice();  //OUR CODE
+        }
+
+        private void InitDevice()  //OUR CODE
+        {
+            PresentParameters pp = newPresentParameters();
+            pp.Windowed = true;
+            pp.SwapEffect = SwapEffect.Discard;
+
+            device = newMicrosoft.DirectX.Direct3D.Device(0, DeviceType.Hardware, this, CreateFlags.SoftwareVertexProcessing, pp);
+            device.Transform.Projection = Matrix.PerspectiveFovLH(3.14f / 4, device.Viewport.Width / device.Viewport.Height, 1f, 1000f);
+            device.Transform.View = Matrix.LookAtLH(new Vector3(0, 0, 20), new Vector3(), new Vector3(0, 1, 0));
+            device.RenderState.Lighting = false;
+        }
+
+        private void Render() //OUR CODE
+        {
+            CustomVertex.PositionTextured[] vertexes = new CustomVertex.PositionTextured[6]; //6 here is the number of vectors you've defined
+
+            //traingle1
+            vertexes[0] = new CustomVertex.PositionTextured(new Vector3(0, 2, 1), 0, 0);
+            vertexes[1] = new CustomVertex.PositionTextured(new Vector3(0, -2, 1), 0, 1);
+            vertexes[2] = new CustomVertex.PositionTextured(new Vector3(2, -2, 1), -1, 1);
+
+            //traingle2
+            vertexes[3] = new CustomVertex.PositionTextured(new Vector3(2, -2, 1), 0, 0);
+            vertexes[4] = new CustomVertex.PositionTextured(new Vector3(2, 2, 1), 0, 1);
+            vertexes[5] = new CustomVertex.PositionTextured(new Vector3(0, 2, 1), -1, 1);
+
+            Texture texture = new Texture(device, newBitmap("E:\\design assignment\\glass.jpg "), 0, Pool.Managed);
+            device.Clear(ClearFlags.Target, Color.Cyan, 1.0f, 0);
+            device.BeginScene();
+            device.SetTexture(0, texture);
+            device.VertexFormat = CustomVertex.PositionTextured.Format;
+            device.DrawUserPrimitives(PrimitiveType.TriangleList, vertexes.Length / 3, vertexes);
+            //in the above line(vertexes.Length=6, so 6/3=2) hence, 1 for single triangle & 2 for double triangle
+            device.EndScene();
+            device.Present();
+        }
+
+        private void Form1_Paint(object sender, PaintEventArgs e)
+        {
+            Render(); //OUR CODE
+        }
+    }
+}
+
+Click the Start button to run file> (you’ll see the following OUTPUT of the window with the color you specified).
+
+ 
+
+
+
+
+---------------------------------------------------------------------------------------------------------------------------------------------
+
+Practical No. 6:
+
+Aim: Programmable Diffuse Lightning in a traingle using Direct3D 11
+
+Transforms.Projection property: Retrieves or sets the projection transformation Matrix. 
+Matrix.PerspectiveFovLH method: Builds a left-handed perspective projection matrix based on a field of view. 
+Input arguments to PerspectiveFovLH are as follows. 
+//Values provided below are examples 
+1) Field of view in radians: pi/4. 
+2) Aspect ratio, or view-space height divided by width: 1, for a square window. 
+3) Near clipping plane distance: 1 unit. 
+4) Far clipping plane distance: 100 units. 
+
+Syntax Example 
+device.Transform.Projection = Matrix.PerspectiveFovLH((float)Math.PI / 4, 1.0f, 1.0f, 100.0f ); 
+Transforms.Viewproperty: Retrieves or sets the view transformation matrix. 
+
+Matrix.LookAtLHmethod: Builds a left-handed look-at matrix. 
+The three input vectors represent the following, respectively: 
+//Values provided below are just for example 
+1) The eye point: [0, 3, -5]. 
+2) The camera look-at target: the origin [0, 0, 0]. 
+3) The current world's up-direction: usually [0, 1, 0]. 
+
+Syntax Example 
+device.Transform.View = Microsoft.DirectX.Matrix.LookAtLH( 
+new Vector3(0.0f, 3.0f, -5.0f), new Vector3(0.0f, 0.0f, 0.0f), new Vector3(0.0f, 1.0f, 0.0f)); 
+
+device.RenderStateproperty: Retrieves a render-state value for a device. 
+CustomVertex.PositionTexturedstructure: Describes a custom vertex format structure that contains position and one set of texture coordinates. 
+Texture.FromBitmap(Device,Bitmap,Usage,Pool) method: Creates a texture resource from a bitmap. 
+Device.SetTexturemethod: Assigns a texture to a device stage. 
+
+Light class: Defines a set of lighting properties. 
+Properties are:
+1) Light.Type: Retrieves or sets the type of the light source. 
+2) Light.Diffuse: Retrieves or sets the diffuse color emitted by the light. 
+3) Light.Enabled: Retrieves or sets a Boolean value that enables or disables a set of lighting parameters within a device. 
+4) Light.Direction: Retrieves or sets the direction in which the light is pointing in world space, as specified by a Vector3 structure. 
+Vector3: Describes and manipulates a vector in three-dimensional (3-D) space. 
+After completing the steps from the initialization file(“base setup.pdf”), now open 
+“Form1.cs” file in your project, and code the part where it is commented as //OUR CODE
+-----Form1.cs------
+using System; 
+using System.Collections.Generic; 
+using System.ComponentModel; 
+using System.Data; 
+using System.Drawing; 
+using System.Linq; 
+using System.Text; 
+using System.Windows.Forms; 
+using Microsoft.DirectX; //OUR CODE
+using Microsoft.DirectX.Direct3D; //OUR CODE
+
+namespace p7 
+{ 
+public partial class Form1 :Form
+{ 
+
+Microsoft.DirectX.Direct3D.Device device; //OUR CODE
+
+public Form1() 
+{ 
+InitializeComponent(); 
+InitDevice(); //OUR CODE
+}  
+private void InitDevice()  //OUR CODE
+{ 
+PresentParameters pp = new PresentParameters();             pp.Windowed = true; 
+pp.SwapEffect = SwapEffect.Discard; 
+
+device = new Device(0, DeviceType.Hardware, this, CreateFlags.SoftwareVertexProcessing, pp);             
+device.RenderState.Lighting = false; 
+device.Transform.Projection = Matrix.PerspectiveFovLH(3.14f / 4, device.Viewport.Width / device.Viewport.Height, 1f, 100f); 
+device.Transform.View = Matrix.LookAtLH(new Vector3(0, 0, 10), new Vector3(), new Vector3(0, 1, 0)); 
+device.RenderState.Lighting = true;             
+device.Lights[0].Type = LightType.Directional;             device.Lights[0].Diffuse = Color.Plum; 
+device.Lights[0].Direction = newVector3(0.8f, 0, -1);             
+device.Lights[0].Enabled = true; 
+}          
+
+private void Render()  //OUR CODE
+{ 
+CustomVertex.PositionNormalColored[] vertexes = new
+CustomVertex.PositionNormalColored[3]; //3 here is the number of vectors you've defined
+
+//triangle1
+vertexes[0] = new CustomVertex.PositionNormalColored(new Vector3(0, 1, 1), new Vector3(1, 0, 1), Color.Red.ToArgb()); 
+vertexes[1] = new CustomVertex.PositionNormalColored(new Vector3(-1, -1, 
+1), new Vector3(1, 0, 1), Color.Red.ToArgb()); 
+vertexes[2] = new CustomVertex.PositionNormalColored(new Vector3(1, -1, 
+1), new Vector3(-1, 0, 1), Color.Red.ToArgb()); 
+
+device.Clear(ClearFlags.Target, Color.Cyan, 1.0f, 0);             
+device.BeginScene(); 
+device.VertexFormat=CustomVertex.PositionNormalColored.Format;             device.DrawUserPrimitives(PrimitiveType.TriangleList, vertexes.Length / 3, vertexes); 
+//in the above line(vertexes.Length=3, so 3/3=1) hence, 1 for single triangle & 2 for double triangle
+device.EndScene();             
+device.Present(); 
+}  
+
+private void Form1_Paint(object sender, PaintEventArgs e) 
+{ 
+Render(); //OUR CODE
+} 
+} 
+} 
+
+Click the Start button to run file> (you’ll see the following OUTPUT of the window with the color you specified). 
+
+
+---------------------------------------------------------------------------------------------------------------------------------------------
+
+Practical No. 7:
+
+Aim: Programmable Diffuse Lightning in a rectangle using Direct3D 11
+
+1)After completing the steps from the initialization file(“base setup.pdf”), now open 
+“Form1.cs” file in your project, and code the part where it is commented as //OUR CODE-----Form1.cs------
+using System; 
+using System.Collections.Generic;
+using System.ComponentModel; 
+using System.Data;
+using System.Drawing; 
+using System.Linq; 
+using System.Text; 
+using System.Windows.Forms; 
+using Microsoft.DirectX; //OUR CODE
+using Microsoft.DirectX.Direct3D; //OUR CODE
+
+namespace p8 
+{ 
+publicpartialclassForm1 : Form
+    { 
+        Microsoft.DirectX.Direct3D.Device device; //OUR CODE
+public Form1() 
+        { 
+            InitializeComponent(); 
+            InitDevice(); //OUR CODE
+        }  
+private void InitDevice() //OUR CODE
+        { 
+PresentParameters pp = newPresentParameters();                 
+pp.Windowed = true; 
+                pp.SwapEffect = SwapEffect.Discard; 
+device=new Device(0, DeviceType.Hardware, this, CreateFlags.SoftwareVertexProcessing, pp);             device.RenderState.Lighting = false; 
+device.Transform.Projection = Matrix.PerspectiveFovLH(3.14f / 4, device.Viewport.Width / device.Viewport.Height, 1f, 100f); 
+device.Transform.View = Matrix.LookAtLH(new Vector3(0, 0, 10), new Vector3(), new Vector3(0, 1, 0)); 
+device.RenderState.Lighting = true;             device.Lights[0].Type = LightType.Directional;             device.Lights[0].Diffuse = Color.Plum; 
+device.Lights[0].Direction = newVector3(0.8f, 0, -1);             device.Lights[0].Enabled = true; 
+        }  
+
+private void Render() //OUR CODE
+        { 
+CustomVertex.PositionNormalColored[] vertexes = new
+CustomVertex.PositionNormalColored[6]; //6 here is the number of vectors you've defined
+
+//triangle1
+            vertexes[0] = new CustomVertex.PositionNormalColored(new Vector3(0, 2, 1), new Vector3(1, 0, 1), Color.Red.ToArgb()); 
+            vertexes[1] = new CustomVertex.PositionNormalColored(new Vector3(0, -2, 1), new Vector3(-1, 0, 1), Color.Red.ToArgb()); 
+            vertexes[2] = new CustomVertex.PositionNormalColored(new Vector3(2, -2, 
+1), new Vector3(-1, 0, 1), Color.Red.ToArgb()); 
+
+//triangle2
+            vertexes[3] = new CustomVertex.PositionNormalColored(new Vector3(2, -2, 
+1), new Vector3(-1, 0, 1), Color.Red.ToArgb()); 
+            vertexes[4] = new CustomVertex.PositionNormalColored(new Vector3(2, 2, 1), new Vector3(-1, 0, 1), Color.Red.ToArgb()); 
+            vertexes[5] = new CustomVertex.PositionNormalColored(new Vector3(0, 2, 1), new Vector3(1, 0, 1), Color.Red.ToArgb()); 
+
+device.Clear(ClearFlags.Target, Color.Cyan, 1.0f, 0);             device.BeginScene(); 
+device.VertexFormat = CustomVertex.PositionNormalColored.Format;             device.DrawUserPrimitives(PrimitiveType.TriangleList, vertexes.Length / 3, vertexes); 
+//in the above line(vertexes.Length=6, so 6/3=2) hence, 1 for single triangle & 2 for double triangle             device.EndScene();            
+device.Present(); 
+        } 
+
+private void Form1_Paint(object sender, PaintEventArgs e) 
+        { 
+            Render(); //OUR CODE
+        } 
+    } 
+} 
+
+2)Click the Start button to run file> (you’ll see the following OUTPUT of the window with the color you specified). 
+
+
+
+---------------------------------------------------------------------------------------------------------------------------------------------
+
+Practical No. 8:
+
+Aim: Loading models into DirectX 11 and rendering
+
+
+
+1)After completing the steps from the initialization file(“base setup.pdf”), now open 
+“Form1.cs” file in your project, and code the part where it is commented as //OUR CODE-----Form1.cs------
+using System; 
+using System.Collections.Generic; 
+using System.ComponentModel; 
+using System.Data; 
+using System.Drawing; 
+usingSystem.Linq;
+ using System.Text; 
+using System.Windows.Forms; 
+using Microsoft.DirectX; //OUR CODE
+using Microsoft.DirectX.Direct3D; //OUR CODE
+
+namespace p9 
+{ 
+publicpartialclassForm1 :Form
+    { 
+Microsoft.DirectX.Direct3D.Device device; //OUR CODE
+Microsoft.DirectX.Direct3D.Texture texture; //OUR CODE         Microsoft.DirectX.Direct3D.Font font; //OUR CODE
+public Form1() 
+        { 
+InitializeComponent(); 
+InitDevice(); //OUR CODE
+InitFont(); //OUR CODE
+LoadTexture(); //OUR CODE
+        }  
+private void InitFont() //OUR CODE
+        { 
+System.Drawing.Font f = new System.Drawing.Font("Arial", 16f, FontStyle.Regular); 
+            font = newMicrosoft.DirectX.Direct3D.Font(device, f); 
+        } 
+private void LoadTexture() //OUR CODE
+        { 
+            texture = TextureLoader.FromFile(device, 
+"D:\\Usman\\College\\507pracs\\beach.jpg", 400, 400, 1, 0, Format.A8B8G8R8, 
+Pool.Managed, Filter.Point, Filter.Point, Color.Transparent.ToArgb()); 
+        } 
+private void InitDevice() //OUR CODE
+        { 
+PresentParameters pp = newPresentParameters();             
+pp.Windowed = true; 
+pp.SwapEffect = SwapEffect.Discard; 
+            device = new Device(0, DeviceType.Hardware, this, 
+CreateFlags.SoftwareVertexProcessing, pp); 
+        } 
+private void Render() //OUR CODE
+        { 
+device.Clear(ClearFlags.Target, Color.Cyan, 0, 1);            
+ device.BeginScene(); 
+using (Sprite s = new Sprite(device))             { 
+s.Begin(SpriteFlags.AlphaBlend); 
+s.Draw2D(texture, new Rectangle(0, 0, 0, 0), new Rectangle(0, 0, device.Viewport.Width, device.Viewport.Height), new Point(0, 0), 0f, new Point(0, 0), Color.White); 
+font.DrawText(s, "GAME PROGRAMMING", new Point(0, 0), Color.Black);                 s.End();             } 
+device.EndScene();             
+device.Present(); 
+        }  
+privatevoid Form1_Paint(object sender, PaintEventArgs e) 
+        { 
+Render(); //OUR CODE
+        } 
+    } 
+} 
+
+2)Click the Start button to run file> (you’ll see the following OUTPUT of the window with the color you specified). 
+
+
+
+---------------------------------------------------------------------------------------------------------------------------------------------
+
+Practical No. 9:
+
+Aim:SpotLighting in Direct3D 11 .
+
+1)After completing the steps from the initialization file(“base setup.pdf”), now open 
+“Form1.cs” file in your project, and code the part where it is commented as //OUR CODE
+-----Form1.cs------
+using System; 
+using System.Collections.Generic; using System.ComponentModel; 
+using System.Data; 
+using System.Drawing;
+ using System.Linq; 
+using System.Text; 
+using System.Windows.Forms; 
+using Microsoft.DirectX.Direct3D; //OUR CODE 
+using Microsoft.DirectX; //OUR CODE
+
+namespace p11 
+{ 
+public partial class Form1 :Form
+    { 
+private Device device; //OUR CODE
+private float angle = 0f; //OUR CODE
+public Form1() 
+        { 
+InitializeComponent(); 
+InitDevice(); //OUR CODE
+
+this.SetStyle(ControlStyles.AllPaintingInWmPaint | ControlStyles.Opaque, true); //OUR CODE
+        }  
+private void InitDevice() //OUR CODE
+        { 
+PresentParameters pp = new PresentParameters();            
+ pp.Windowed = true; 
+pp.SwapEffect = SwapEffect.Discard; 
+            device = new Device(0, DeviceType.Hardware, this, CreateFlags.SoftwareVertexProcessing, pp);             device.RenderState.CullMode = Cull.None;             device.RenderState.Lighting = true;             
+
+device.Lights[0].Type = LightType.Spot;             device.Lights[0].Range = 4; 
+device.Lights[0].Position = new Vector3(0, -1, 0f);             device.Lights[0].Enabled = true; 
+}   
+private void Render() //OUR CODE
+        { 
+device.Transform.Projection = Matrix.PerspectiveFovLH((float)Math.PI / 4, this.Width / this.Height, 1f, 50f); 
+device.Transform.View = Matrix.LookAtLH(new Vector3(0, 0, 30), new
+Vector3(1, 0, 0), new Vector3(0, 5, 0)); 
+
+CustomVertex.PositionNormalColored[] vertices = new CustomVertex.PositionNormalColored[6]; 
+vertices[0].Position = new Vector3(10f, 12f, 0f);             vertices[0].Normal = new Vector3(0, 2, 0.5f);             vertices[0].Color = Color.Yellow.ToArgb(); 
+
+vertices[1].Position = new Vector3(-5f, 5f, 0f);             vertices[1].Normal = new Vector3(0, 2, 0.5f);             vertices[1].Color = Color.Blue.ToArgb(); 
+
+vertices[2].Position = new Vector3(5f, 5f, -1f);             vertices[2].Normal = new Vector3(0, 0, 0.5f);             vertices[2].Color = Color.Pink.ToArgb(); 
+vertices[3].Position = new Vector3(5f, -5f, -1f);             vertices[3].Normal = new Vector3(0, 0, 0.5f);             vertices[3].Color = Color.Green.ToArgb(); 
+vertices[4].Position = new Vector3(10f, 12f, 0f);             vertices[4].Normal = new Vector3(0, 0, 0.5f);             vertices[4].Color = Color.Green.ToArgb(); 
+
+device.Clear(ClearFlags.Target, Color.Cyan, 1.0f, 0);             device.BeginScene();             
+Vector3 v; 
+device.VertexFormat = CustomVertex.PositionNormalColored.Format;             device.Transform.World = Matrix.Translation(-5, -10 * 1 / 3, 0) * 
+Matrix.RotationAxis(new Vector3(), 0); 
+
+Console.WriteLine(device.Transform.World.ToString()); 
+
+device.DrawUserPrimitives(PrimitiveType.TriangleStrip, 3, vertices);             device.EndScene();             
+device.Present();             
+Invalidate(); 
+        }  
+private void Form1_Paint(object sender, PaintEventArgs e) 
+        { 
+Render(); //OUR CODE
+        } 
+    } 
+} 
+2)Click the Start button to run file> (you’ll see the following OUTPUT of the window with the color you specified).
+
+ss
+
+
+---------------------------------------------------------------------------------------------------------------------------------------------
+
+
+
+TO CREATE A PROJECT IN UNITY 
+Step 1: Create a Project
+
+Step 2: Name the project you wish and make sure you have selected 3D Template.
+
+Step 3: After clicking Create Project, wait a few minutes until the Unity editor loads
+
+
+
+
+BASIC CONTROL TO USE IN UNITY EDITOR 
+
+Hold the right Mouse button + WASD key to move inside the scene
+ALT key + Hold right Mouse Button: For zoom in and out (not used by me :))
+Hold Middle Scroll wheel : To move in the scene
+To select any component: Just click on them in the scene Or select them from the Hierarchy window
+Pressing the “F” key after selecting a game object in the scene window will focus that object in the center of the scene view. Note: Your mouse placement matters here. Hover over the scene window for the object to focus there
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ROLL A BALL GAME: 
+CREATE ENVIRONMENT 
+ADD SCRIPTS TO PLAYER AND CAMERA
+COLLECTABLES (COINS)
+SHOW SCORE
+
+Step1: Create a project
+Step2: Add a cube to the scene: Right Click in the hierarchy window >> 3D Object >> Plane
+
+OR
+
+Step 3: Add a sphere. Just like you added the plane. And place the sphere above the plane/ground (<-- if not). You can use the axis arrow to move the cube and place it above the plane
+
+Select sphere and name it as player
+Name this sphere as a player from the inspector window which is on the right side(You can name it anything)
+
+Step 4: Now add Materials(colors) to the environment 
+Right click on in the project window >>> create >> Material
+
+Name it anything you wish 
+
+Now give a color to it by selecting it and then changing color from the inspector tab
+
+Now Drag this material from the project tab to the sphere / Player
+
+Do this one more time for Ground/Plane 
+We get this result 
+
+Step 5: Add walls to the environment. So that we don't fall from ground
+Add a cube just like u added a sphere
+Now change the size of the cube to make it look like a long wall from the inspector window ( increase Z-axis or X-axis value)
+
+OR 
+USE THE RECT TOOL TO SCALE IT MANUALLY
+Select our cube and press the T key on the keyboard or the icon on the top:
+
+And scale it
+
+Resize it according to the ground
+
+Do this same for all other 3 sides
+To rotate change the rotation of the Y-Axis
+
+Finally, it will look like this
+
+Step 6: Add Rigidbody component on Player/Sphere. Add it from the inspector window while the sphere is selected
+(Rigidbody provides real-world physics to the component)
+
+SEC-2: ADD CAMERA AND PLAYER SCRIPTS
+Step7: Now create a script for player movement. right click on the project window >>> create >>> c# script 
+
+
+Step 8: Double click on the script and add the movement code given below:
+
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class PlayerMove : MonoBehaviour
+{
+    public Rigidbody rb;    
+    public float speed = 10; 
+
+    // Start is called before the first frame update
+    void Start()
+    {
+        rb = GetComponent<Rigidbody>();
+    }
+
+
+    // Update is called once per frame
+    void Update()
+    {
+        float movH = Input.GetAxis("Horizontal");
+        float movV = Input.GetAxis("Vertical");
+
+        Vector3 movement = new Vector3(movH, 0, movV);
+        
+
+        rb.AddForce((movement * speed)*Time.deltaTime);
+    }
+}
+
+
+
+
+
+
+
+Step 9: Drag the script and drop it into the sphere. 
+
+Play the game:
+
+You can see the player move :) If not then you have messed up something :( Follow the Steps again
+
+Step 10: Fixing the camera position and adding the script.
+In Unity, To align CAMERA or Any Object to your view, select the Main Camera and hit Ctrl + Shift + F. The camera will then align with the scene view.    
+
+
+
+
+
+
+
+
+BEFORE->
+
+AFTER ->
+
+Step 11: Add a script and name it camFollow . Also drag and drop the script to the MainCamera
+
+Now open the script and put the code which is given below:
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class camFollow : MonoBehaviour 
+{
+    public Transform target;
+    private Vector3 offset;
+
+    // Start is called before the first frame update
+    void Start()
+    { 
+        offset = transform.position - target.transform.position;
+    }
+    // Update is called once per frame
+    void Update()
+    {
+         transform.position = target.position + offset;
+    }
+}
+
+Now you Camera follow player’s movement
+SEC 3- ADD COLLECTABLES
+Step 12: Add coins 
+Right Click in Heirarchy window>> 3D Object >> Sphere
+Place the sphere above the plane ( if its not)
+Now Change the Scale and reduce it so that it looks like a coin (you can also use a cube)
+Add a yellow color to it 
+
+Also, make sure to check this box  while the coin is selected (by doing this the player can interact with it)
+
+STEP 13: Add a tag to coin
+While the coin is selected. In the inspector window click on Untagged drop down and select Add tag:
+
+Click on the + icon and add a tag called “PickUp” you can call it anything but we have to use the same tag in the code so remember it.
+
+
+Now again select our coin cube and add the tag PickUp to it 
+
+
+STEP 14: Now we have to tell our player to collect the coins which have a “PickUp” tag on them. We detect any object by its collider and then check the tag. If the tag matches what we want then we can perform something on that
+
+
+
+
+
+Lets open the PlayerMovement script and then add the below code:
+void OnTriggerEnter(Collider other)
+    {
+        if (other.gameObject.CompareTag("PickUp"))
+        {
+            Destroy(other.gameObject);
+        }
+    }
+
+Now you can play and test it :) 
+
+STEP 15: (OPTIONAL) Add rotation to coin
+Create a script for coin and drop to our sphere(coin) (Make sure to do it at one coin and then duplicate the coins. So that you dont have to add scripts to each coin object)
+Open the script and add the below code:
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class coinRotate : MonoBehaviour
+{
+    // Update is called once per frame
+    void Update()
+    {
+        transform.Rotate(new Vector3(0, 30, 0) * Time.deltaTime);
+    }
+}
+Now your coin will start rotating
+
+
+SEC-4: SCORES
+Step 16: We have to create a count variable and update it on each pickup 
+Add the code below in the script:
+
+Step17: Now you need a way to show the count variable on the screen. Here we will use Unity’s GUI Text
+To add gui do this: Right click in hierarchy window >>> UI >> Text 
+
+This things will be added:
+
+
+
+
+
+
+Now you can see a text on the game view: 
+
+If not then go into 2d view and press f key to get a view of it and then use axis arrows to move it
+
+
+Step18: 
+Now we have to display our count value to the GUI we have created. So open the PlayerMovement Script again. 
+Now before we can code anything for UI element, we need to tell our script more abou them. We have to use UI namespace to tell our script about UI element
+At the top of the script add the below namespace: 
+using UnityEngine.
+
+Now we can add UI code 
+    Add the below code in the script:
+
+
+
+
+
+
+
+
+
+Now drag and drop the Text component from the hierarchy window to the text reference of the script
+
+Now play the game! Collect the coins and you will get the count!!
+
+
+
+
+
+
+PRACTICAL QUESTION ON ROLL A BALL:
+Using Unity 2D, take an image of human being. Create an environment around it containing lots of 1 rupee coins. Create a path for the human being to move based on input(keys or mouse). As he/she collides with coin, it should vanish. Also display the amount collected at the end. (Scene Creation - 20 marks, Object manipulation - 20 marks)
+
+
+
+THE END
+
+---------------------------------------------------------------------------------------------------------------------------------------------
+
+
+
+Q. Using Unity 2D, take an image of a human being. Create an environment around it containing lots of 1 rupee coins. Create a path for the human being to move based on input(keys or mouse). As he/she collides with the coin, it should vanish. Also, display the amount collected at the end.
+
+Step 1. Create a 2D project.
+
+2. Go to asset store
+
+Or
+ 
+3. Search for standard asset and install it
+
+Click import to import in your project
+
+
+4. Now in Project Window, Go to Standard Asset >> 2D >> Prefabs. You will find all this in that folder.
+
+5. Drag and drop it to create a level. And also drop Character Robot so that you can play with it.
+
+Design a good level and press play and play around in the game.
+6. Now we have to add coin in the game so that our player can pick it up.
+(here it is a 2d game so we have to use sprites)
+
+
+
+
+
+
+7. Right Click inside the project window and create a circle sprite and name it coin
+
+
+8. Now drag and drop it in the scene and change the color of the coin to yellow
+You can reduce the Scale on X and Y axis to make it smaller
+
+9. Also add a Circle Collider to the coin. And set isTrigger value to true
+
+
+10. Now Use the same technique to create a coin as we did in Roll a Ball
+(TRY IT BY YOUR SELF)
+Create a Pickup script and add it to the Player Robot
+Open it and code it 
+HINT: USE onTriggerEnter Function
+
+11. Now play the game and you can see it working. Duplicate the coin in the scene and play with it
+
+12. Now we have to add Score Text
+(TRY TO DO IT BY YOURSELF)
+Create a Text Object in the Hierarchy Window
+Place it to a visible area 
+Change Font Size, Color as needed
+Add code in Pickup Script
+
+11. Play the game!
+
+
+
+
+
+
