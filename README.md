@@ -1,2 +1,1 @@
-# susdir
-very sus dir
+# Study Notes 
