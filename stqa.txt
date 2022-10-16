@@ -1,0 +1,337 @@
+prac: 1 calculator
+<script language="javascript">
+function addition()
+{
+var num1=parseInt(document.arithmetic.n1.value);
+var num2=parseInt(document.arithmetic.n2.value);
+var result=num1+num2;
+document.arithmetic.res.value=result;
+}
+function subtraction()
+{
+var num1=parseInt(document.arithmetic.n1.value);
+var num2=parseInt(document.arithmetic.n2.value);
+var result=num1-num2;
+document.arithmetic.res.value=result;
+}
+function multiplication()
+
+{
+var num1=parseInt(document.arithmetic.n1.value);
+var num2=parseInt(document.arithmetic.n2.value);
+var result=num1*num2;
+document.arithmetic.res.value=result;
+}
+function division()
+{
+var num1=parseInt(document.arithmetic.n1.value);
+var num2=parseInt(document.arithmetic.n2.value);
+var result=num1/num2;
+document.arithmetic.res.value=result;
+}
+</script>
+
+---------------------------------------------------------------------------------------------------------------
+
+prac: selenium server
+
+<html>
+<head>
+
+<script type="text/javascript">
+function gcd()
+{
+var x,y;
+x=parseInt(document.myform.n1.value);
+y=parseInt(document.myform.n2.value);
+while(x!=y)
+{
+if(x>y){x=x-y;}
+else{y=y-x;}
+}
+document.myform.result.value=x;
+}
+</script>
+</head>
+
+<body>
+<center>
+<h1>---Program to calculate GCD of two numbers---</h1>
+<hr color="red">
+
+<form name="myform">
+Enter Number 1: <input type="text" name="n1" value=""> <br> <br>
+Enter Number 2: <input type="text" name="n2" value=""> <br> <br>
+<input type="button" name="btn" value="Get GCD" onClick="gcd()"><br><br>
+GCD: <input type="text" name="result" value="">
+</form>
+</center>
+</body>
+</html>
+
+**
+
+package gcd;
+
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.firefox.FirefoxDriver;
+import org.openqa.selenium.firefox.FirefoxOptions;
+import org.openqa.selenium.firefox.FirefoxProfile;
+
+public class gcd {
+	static String driverpath = ("D:\\sem5\\503\\geckodriver.exe");
+
+
+	public static void main(String[] args) {
+		System.setProperty("webdriver.gecko.driver",driverpath); 
+		FirefoxProfile fp = new FirefoxProfile(); 
+		fp.setPreference(FirefoxProfile.PORT_PREFERENCE,"7055"); 
+		FirefoxOptions options = new FirefoxOptions(); 
+		options.setProfile(fp);
+		WebDriver driver=new FirefoxDriver(options);
+		driver.get("file:///D:/sem5/503/gcd/gcd.html"); 
+		driver.findElement(By.name("n1")).sendKeys("36"); 
+		driver.findElement(By.name("n2")).sendKeys("6"); 
+		driver.findElement(By.name("btn")).click(); 
+		String result=driver.findElement(By.name("result")).getAttribute("name=result");
+		System.out.println("GCD="+result); 
+		} 
+		}
+
+**********************************************************************************************************
+
+prac : Facebook login
+
+package p7;
+import org.openqa.selenium.By;
+import org.openqa.selenium.Keys;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.firefox.FirefoxDriver;
+import org.openqa.selenium.firefox.*;
+import org.openqa.selenium.firefox.FirefoxOptions;
+import org.openqa.selenium.firefox.FirefoxProfile;
+import org.openqa.selenium.firefox.internal.ProfilesIni;
+public class FB_login {
+static String driverPath = "C:\\Users\\Usman\\503\\geckodriver.exe";
+public static void main(String[] args) {
+System.setProperty("webdriver.gecko.driver", driverPath);
+
+//DesiredCapabilities capabilities = DesiredCapabilities.firefox();
+//capabilities.setCapability("marionette",true);
+ProfilesIni allProfiles = new ProfilesIni();
+FirefoxProfile fp = new FirefoxProfile();
+
+fp.setPreference(FirefoxProfile.PORT_PREFERENCE,"7055");
+FirefoxOptions options = new FirefoxOptions();
+options.setProfile(fp);
+//objects and variables instantiation
+WebDriver driver = new FirefoxDriver(options);
+String appUrl = "https://www.facebook.com/";
+//launch the firefox browser and open the application url
+driver.get(appUrl);
+//maximize the browser window
+driver.manage().window().maximize();
+//declare and initialize the variable to store the expected title of the
+webpage.
+String expectedTitle = "Facebook – log in or sign up";
+//fetch the title of the web page and save it into a string variable
+String actualTitle = driver.getTitle();
+//compare the expected title of the page with the actual title of the page
+and print the result
+if (expectedTitle.equals(actualTitle)) {
+System.out.println("Verification Successful - The correct title is
+displayed on the web page.");
+}
+else {
+System.out.println("Verification Failed - An incorrect title is
+displayed on the web page.");
+}
+//enter a valid username in the email textbox
+WebElement username = driver.findElement(By.id("email"));
+username.clear();
+username.sendKeys("your email id");
+//enter a valid password in the password textbox
+WebElement password = driver.findElement(By.id("pass"));
+password.clear();
+password.sendKeys("your password");
+password.sendKeys(Keys.ENTER);
+//click on the Sign in button
+WebElement LogInButton = driver.findElement(By.id("u_0_2"));
+LogInButton.click();
+//close the web browser
+driver.close();
+System.out.println("Test script executed successfully.");
+//terminate the program
+System.exit(0);
+}
+}
+***************************************************************************************
+
+prac: find all links
+
+package p8;
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.firefox.FirefoxDriver;
+import org.openqa.selenium.firefox.*;
+import org.openqa.selenium.firefox.FirefoxOptions;
+import org.openqa.selenium.firefox.FirefoxProfile;
+import org.openqa.selenium.firefox.internal.ProfilesIni;
+public class FindAllLinks {
+static String driverPath = "C:\\Users\\Usman\\503\\geckodriver.exe";
+public static void main(String[] args) {
+System.setProperty("webdriver.gecko.driver",driverPath);
+//NOTE THAT: following commented lines are required for old machines
+//DesiredCapabilities capabilities = DesiredCapabilities.firefox();
+
+//capabilities.setCapability("marionette",true);
+//ProfilesIni allProfiles = new ProfilesIni();
+//FirefoxProfile fp = new FirefoxProfile();
+//fp.setPreference(FirefoxProfile.PORT_PREFERENCE,"7055");
+//FirefoxOptions options = new FirefoxOptions();
+//options.setProfile(fp);
+
+WebDriver driver = new FirefoxDriver();
+String appUrl ="https://www.google.co.in/";
+driver.get(appUrl);
+java.util.List<WebElement> links =
+
+driver.findElements(By.tagName("a"));
+
+for (int i = 1; i<links.size(); i=i+1)
+{
+System.out.println(links.get(i).getText());
+}
+System.out.println("Total No. of Links: "+links.size());
+//driver.quit();
+}
+}
+*********************************************************************************
+
+prac : excel write
+
+package excelwrite;
+import jxl.*; //used for WorkbookSettings,Workbook
+import jxl.write.*; //used for WriteException,WritableWorkbook,WritableSheet,Label
+import jxl.write.Number; //used for Number
+import java.io.*; //used for IOException,File
+import java.util.Locale; //used for Locale
+public class Excelwriter {
+public static void main(String[] args) throws IOException,WriteException {
+// TODO Auto-generated method stub
+int r=0,c=0;
+String header[]={"Student
+Name","Subject1","Subject2","Subject3","Total"};
+
+String
+
+sname[]={"Carls","James","Paul","Philip","Smith","Thomson","Rhodey","Stark","Gary"
+,"AnneMarie"};
+
+int marks[]={50,45,60,55,70,45,67,78,89,90,30};
+File file = new File("student.xls");
+WorkbookSettings wbSettings = new WorkbookSettings();
+wbSettings.setLocale(new Locale("en", "EN"));
+WritableWorkbook workbook = Workbook.createWorkbook(file,
+
+wbSettings);
+
+workbook.createSheet("Report", 0);
+WritableSheet excelSheet = workbook.getSheet(0);
+//creating header row
+for(r=0;r<1;r++) {
+for(c=0;c<header.length;c++) {
+Label l=new Label(c,r,header[c]);
+excelSheet.addCell(l);
+}
+}
+//filling name in column1
+for(r=1;r<=sname.length;r++) {
+for(c=0;c<1;c++) {
+Label l=new Label(c,r,sname[r-1]);
+excelSheet.addCell(l);
+}
+}
+//filling name in column2,3,4
+for(r=1;r<=sname.length;r++) {
+for(c=1;c<4;c++) {
+Number num = new Number(c, r, marks[r-1]);
+excelSheet.addCell(num);
+}
+}
+
+//filling name in total
+for(r=1;r<=sname.length;r++) {
+for(c=4;c<5;c++) {
+int total=marks[r-1]+marks[r-1]+marks[r-1];
+Number num = new Number(c, r, total);
+excelSheet.addCell(num);
+}
+}
+workbook.write();
+workbook.close();
+System.out.println("Excel File Created!!!!!");
+}
+}
+
+**************************************************************************************
+
+prac : ecxel update
+
+package excelread;
+import java.io.File;
+import java.io.IOException;
+import jxl.Cell;
+import jxl.CellType;
+import jxl.Sheet;
+import jxl.Workbook;
+import jxl.read.biff.BiffException;
+public class Excelreader {
+private String inputFile;
+public void setInputFile(String inputFile) {this.inputFile = inputFile;}
+public void read() throws IOException {
+File inputWorkbook = new File(inputFile);
+Workbook w;
+boolean flag=false;
+int count=0;
+try {
+w = Workbook.getWorkbook(inputWorkbook);
+// Get the first sheet
+Sheet sheet = w.getSheet(0);
+// Loop over first 10 column and lines
+for (int j = 0; j < sheet.getRows(); j++) {
+for (int i = 0; i < sheet.getColumns()-1; i++) {
+Cell cell = sheet.getCell(i, j);
+if (cell.getType() == CellType.NUMBER) {
+
+if(Integer.parseInt(cell.getContents())>=60){
+flag = true;
+if(flag == true){
+count++;
+flag=false;
+}
+break;
+}
+}
+}
+}
+System.out.println("Total number of students who scored more
+
+than 60 in one or more subjects: " +count);
+
+}
+catch (BiffException e) {e.printStackTrace();}
+}
+
+public static void main(String[] args) throws IOException {
+Excelreader test = new Excelreader();
+
+test.setInputFile("C:\\Users\\Usman\\eclipse-
+workspace\\p5\\student.xls");
+
+test.read();
+}
+}	
