@@ -1,0 +1,65 @@
+<html>
+
+<head>
+    <title>prac1</title>
+    <script language="javascript">
+        function addition() {
+            var num1 = parseInt(document.arithmetic.n1.value);
+            var num2 = parseInt(document.arithmetic.n2.value);
+            var result = num1 + num2;
+            document.arithmetic.res.value = result;
+        }
+        function subtraction() {
+            var num1 = parseInt(document.arithmetic.n1.value);
+            var num2 = parseInt(document.arithmetic.n2.value);
+            var result = num1 - num2;
+            document.arithmetic.res.value = result;
+        }
+        function multiplication() {
+            var num1 = parseInt(document.arithmetic.n1.value);
+            var num2 = parseInt(document.arithmetic.n2.value);
+            var result = num1 * num2;
+            document.arithmetic.res.value = result;
+        }
+        function division() {
+            var num1 = parseInt(document.arithmetic.n1.value);
+            var num2 = parseInt(document.arithmetic.n2.value);
+            var result = num1 / num2;
+            document.arithmetic.res.value = result;
+        }
+    </script>
+</head>
+
+<body>
+    <h1 align="center"> Arithmetic Operations </h1>
+    <form name="arithmetic">
+        <table border="1" align="center">
+
+            <tr>
+                <td>Number 1: </td>
+                <td><input type="text" name="n1" size="20"></td>
+            </tr>
+
+            <tr>
+                <td>Number 2: </td>
+                <td><input type="text" name="n2" size="20"></td>
+            </tr>
+
+            <tr>
+                <td colspan=2>
+                    <input type="button" name="add" value="Add" onclick="javascript:addition();">&nbsp;
+                    <input type="button" name="sub" value="Subtract" onclick="javascript:subtraction();">&nbsp;
+                    <input type="button" name="mul" value="Multiply" onclick="javascript:multiplication();">&nbsp;
+                    <input type="button" name="div" value="Divide" onclick="javascript:division();">&nbsp;
+                </td>
+            </tr>
+
+            <tr>
+                <td colspan="2">Result is: <input type="text" name="res" size="20" value=""></td>
+            </tr>
+
+        </table>
+    </form>
+</body>
+
+</html>
